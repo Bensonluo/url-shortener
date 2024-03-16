@@ -1,27 +1,29 @@
 # coding: utf-8
 """
-response tool
+response standardize tool
 """
 
 import json
 import decimal
-from datetime import date, time, datetime
+import logging
 
+from datetime import date, time, datetime
 from flask import Response
 
 
 RESPONSE_CODE_LIST = {
-    "ERR": (-1, "unknown errors"),
-    "OK": (200, "ok"),
-    "SUCCESS": (200, "SUCCESS"),
-
-    "CODE400": (400, "Bad Request"),
-    "CODE404": (404, "Page not found"),
-    "CODE500": (500, "Internal error"),
+    -1: "unknown errors",
+    200: "Success",
+    400: "Bad Request",
+    404: "Page not found",
+    500: "Internal error"
 }
 
 
 class JsonEncoder(json.JSONEncoder):
+    """
+    json encoder
+    """
     def default(self, obj):
         if isinstance(obj, datetime):
             return obj.strftime("%Y-%m-%d %H:%M:%S")
@@ -36,18 +38,34 @@ class JsonEncoder(json.JSONEncoder):
 
 
 def json_return(data):
-    return Response(json.dumps(data, cls=JsonEncoder, separators=(",", ":")), mimetype="application/json")
+    """
+    jsonify
+    :param data:
+    :return:
+    """
+    return Response(
+        json.dumps(data, cls=JsonEncoder, separators=(",", ":")), mimetype="application/json")
 
 
 def api_return(code, msg=None, data=None, **kwargs):
-    code = str(code).upper()
+    """
+    api return wrapper
+    :param code:
+    :param msg:
+    :param data:
+    :param kwargs:
+    :return:
+    """
+    logging.info(code)
+
     if code not in RESPONSE_CODE_LIST.keys():
-        code = "ERR"
+        logging.info(RESPONSE_CODE_LIST.keys())
+        code = -1
     if msg is None:
-        msg = RESPONSE_CODE_LIST[code][1]
+        msg = RESPONSE_CODE_LIST[code]
     if data is None:
         data = ""
 
-    result = {"code": RESPONSE_CODE_LIST[code][0], "msg": msg, "data": data}
+    result = {"code": code, "msg": msg, "data": data}
     result.update(kwargs)
     return json_return(result)

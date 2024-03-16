@@ -1,6 +1,9 @@
-from flask import Blueprint, Response, jsonify, request
+# coding: utf-8
+"""
+url api
+"""
+from flask import Blueprint
 
-import logging
 
 bp = Blueprint('url_tool', __name__, url_prefix='/url')
 
@@ -31,5 +34,3 @@ def follow():
     :return:
     """
     return
-
-
