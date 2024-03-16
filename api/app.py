@@ -28,14 +28,14 @@ def create_app(test_config=None):
 
     # ensure the instance folder exists
     try:
-        os.makedirs(app.instance_path)
+        os.makedirs(application.instance_path)
     except OSError:
         pass
 
     logging.basicConfig(level=logging.DEBUG)
     # apply the blueprints to the app
-    app.register_blueprint(sys.bp)
-    app.register_blueprint(url.bp)
+    application.register_blueprint(sys.bp)
+    application.register_blueprint(url.bp)
 
     return application
 

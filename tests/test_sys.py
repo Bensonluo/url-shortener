@@ -17,3 +17,7 @@ def test_index(client):
 
 def test_health(client):
     assert client.get("/health").status_code == 200
+
+
+if __name__ == '__main__':
+    pytest.main()
