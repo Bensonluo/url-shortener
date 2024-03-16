@@ -4,7 +4,7 @@ style:
 	@black api
 	@isort api
 
-	# tests are production code too!
+	# tests are production code
 	@black tests
 	@isort tests
 
@@ -23,6 +23,3 @@ develop:
 
 test:
 	@pytest tests
-
-load-test:
-	@locust -f tests/load/locustfiles/api.py

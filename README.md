@@ -34,13 +34,13 @@ installed to run this project with Docker. To build a containerised version of t
 run:
 
 ```bash
-docker build . -t flask-api
+docker build . -t url-short
 ```
 
 To launch the containerised app, run:
 
 ```bash
-docker run -p 8080:8080 flask-api
+docker run -p 8080:8080 url-short
 ```
 
 You should see your server boot up, and should be accessible as before.

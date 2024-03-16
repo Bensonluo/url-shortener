@@ -4,10 +4,7 @@ response standardize tool
 """
 
 import json
-import decimal
 import logging
-
-from datetime import date, time, datetime
 from flask import Response
 
 
@@ -20,23 +17,6 @@ RESPONSE_CODE_LIST = {
 }
 
 
-class JsonEncoder(json.JSONEncoder):
-    """
-    json encoder
-    """
-    def default(self, obj):
-        if isinstance(obj, datetime):
-            return obj.strftime("%Y-%m-%d %H:%M:%S")
-        elif isinstance(obj, date):
-            return obj.strftime("%Y-%m-%d")
-        elif isinstance(obj, time):
-            return obj.strftime('%H:%M:%S')
-        elif isinstance(obj, decimal.Decimal):
-            return float(obj)
-        else:
-            return super().default(self, obj)
-
-
 def json_return(data):
     """
     jsonify
@@ -44,7 +24,7 @@ def json_return(data):
     :return:
     """
     return Response(
-        json.dumps(data, cls=JsonEncoder, separators=(",", ":")), mimetype="application/json")
+        json.dumps(data, separators=(",", ":")), status=data["code"], mimetype="application/json")
 
 
 def api_return(code, msg=None, data=None, **kwargs):
@@ -56,10 +36,7 @@ def api_return(code, msg=None, data=None, **kwargs):
     :param kwargs:
     :return:
     """
-    logging.info(code)
-
     if code not in RESPONSE_CODE_LIST.keys():
-        logging.info(RESPONSE_CODE_LIST.keys())
         code = -1
     if msg is None:
         msg = RESPONSE_CODE_LIST[code]
