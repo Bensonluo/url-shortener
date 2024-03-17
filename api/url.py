@@ -55,6 +55,7 @@ def decode():
     if not is_url(s_url):
         logging.info("Invalid URL: {}".format(s_url))
         return api_return(400, "Bad Request", data="Invalid URL")
+
     url = decode_url(s_url)
     if url is None:
         logging.info("original url not found: {}".format(s_url))
@@ -81,6 +82,7 @@ def follow():
     if not is_url(s_url):
         logging.info("Invalid URL: {}".format(s_url))
         return api_return(400, "Bad Request", data="Invalid URL")
+
     url = decode_url(s_url)
     if url is None:
         logging.info("original url not found: {}".format(s_url))

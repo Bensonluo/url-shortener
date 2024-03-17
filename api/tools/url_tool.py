@@ -34,7 +34,7 @@ def encode_url(url: str) -> str:
         return res
 
 
-def decode_url(s_url) -> str:
+def decode_url(s_url: str) -> str:
     """
     decode shortened url to original
     """
@@ -44,11 +44,11 @@ def decode_url(s_url) -> str:
     return decode_hmap.get(s_url, None)
 
 
-def is_url(s):
+def is_url(s: str) -> bool:
     """
     check is a str valid url
     :param s:
-    :return:
+    :return: bool
     """
     try:
         result = urlparse(s)

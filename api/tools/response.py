@@ -4,7 +4,6 @@ response standardize tool
 """
 
 import json
-import logging
 from flask import Response
 
 
