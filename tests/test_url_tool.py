@@ -13,7 +13,9 @@ class TestUrlTool:
         return request.param
 
     def test_url_encode(self, url):
-        pass
+        encoded = url_tool.encode_url(url[0])
+        assert encoded == url[1]
 
     def test_url_decode(self, url):
-        pass
+        decoded = url_tool.decode_url(url[1])
+        assert decoded == url[0]

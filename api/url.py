@@ -8,7 +8,7 @@ from flask import Blueprint, request, redirect
 from api.tools.response import api_return
 from api.tools.url_tool import encode_url, is_url, decode_url
 
-bp = Blueprint('url', __name__, url_prefix='/url')
+bp = Blueprint('url_tool', __name__, url_prefix='/url')
 
 
 @bp.route("/encode", methods=["POST"])
@@ -18,7 +18,22 @@ def encode():
     input:JSON original URLs in Body
     return:JSON shortened URLs in Body
     """
-    pass
+    try:
+        data = request.get_json()
+    except Exception as e:
+        logging.info(e)
+        return api_return(400, "Bad Request")
+    if data is None:
+        logging.info("fail to load request data")
+        return api_return(400, "Bad Request")
+
+    url = data['url']
+    if not is_url(url):
+        logging.info("Invalid URL: {}".format(url))
+        return api_return(400, "Bad Request", data="Invalid URL")
+
+    s_url = encode_url(url)
+    return api_return(200, s_url=s_url)
 
 
 @bp.route("/decode", methods=["POST"])
@@ -28,7 +43,24 @@ def decode():
     input:JSON shortened URLs in Body
     return:JSON original URLs in Body
     """
-    pass
+    try:
+        data = request.get_json()
+    except Exception as e:
+        logging.info(e)
+        return api_return(400, "Bad Request")
+    if data is None:
+        return api_return(400, "Bad Request")
+
+    s_url = data['s_url']
+    if not is_url(s_url):
+        logging.info("Invalid URL: {}".format(s_url))
+        return api_return(400, "Bad Request", data="Invalid URL")
+
+    url = decode_url(s_url)
+    if url is None:
+        logging.info("original url not found: {}".format(s_url))
+        return api_return(200, "original url not found.", url=url)
+    return api_return(200, url=url)
 
 
 @bp.route("/follow", methods=["POST"])
@@ -38,5 +70,22 @@ def follow():
     input:JSON  shortened URLs in Body
     return:JSON
     """
-    pass
+    try:
+        data = request.get_json()
+    except Exception as e:
+        logging.info(e)
+        return api_return(400, "Bad Request")
+    if data is None:
+        return api_return(400, "Bad Request")
+
+    s_url = data['s_url']
+    if not is_url(s_url):
+        logging.info("Invalid URL: {}".format(s_url))
+        return api_return(400, "Bad Request", data="Invalid URL")
+
+    url = decode_url(s_url)
+    if url is None:
+        logging.info("original url not found: {}".format(s_url))
+        return api_return(200, "original url not found.", url=url)
+    return redirect(url)
 
